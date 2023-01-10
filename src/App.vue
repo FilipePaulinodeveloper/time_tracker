@@ -5,13 +5,7 @@
     </div>
 
     <div class="column is-three-quarters conteudo">
-      <FormularioForm @aoSalvarTarefa="salvarTarefa"/>
-      <div class="lista">        
-        <TarefaTask v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa"/>
-        <BoxBox v-if="listaEstaVazia">
-          Você não está muito produtivo hoje :(
-        </BoxBox>
-      </div>
+        <router-view></router-view>
     </div>
 
  </main>
@@ -20,37 +14,21 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import BarraLateral from './components/BarraLateral.vue';
-import BoxBox from './components/BoxBox.vue';
-import FormularioForm from './components/FormularioForm.vue';
-import TarefaTask from './components/TarefaTask.vue';
-import ITarefa from './Interfaces/ITarefa'
 
 export default defineComponent({
   name: 'App',   
 
   components:{
-    BarraLateral,
-    FormularioForm,
-    TarefaTask,
-    BoxBox
+    BarraLateral, 
 },
   data() {
-    return {
-      tarefas: [] as ITarefa[] ,
+    return {      
       modoEscuroAtivo: false
     };
   },
 
-  computed: {
-    listaEstaVazia(): boolean {
-      return this.tarefas.length === 0 
-    }
-  },
   methods:{
-    salvarTarefa(tarefa:ITarefa)
-    {
-        this.tarefas.push(tarefa);
-    },
+   
     trocarTema(modoEscuroAtivo : boolean){
       this.modoEscuroAtivo = modoEscuroAtivo
     }
