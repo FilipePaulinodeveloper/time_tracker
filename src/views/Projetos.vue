@@ -19,12 +19,26 @@
                 </button>
             </div>
         </form>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="projeto in projetos" :key="projeto.id">
+                    <td>{{projeto.id}}</td>
+                    <td>{{projeto.nome}}</td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import IProjeto from '../interfaces/projeto'
+import IProjeto from '../Interfaces/IProjeto'
 
 export default defineComponent (
 {
@@ -32,20 +46,26 @@ export default defineComponent (
 
      data() {
         return {
-            nomeDoProjeto:''
+            nomeDoProjeto:'',
+            projetos:[] as IProjeto[]
         }
      },
      methods:{
         salvar() {
-            const Projeto : IProjeto = {
-                nome:this.nomeDoProjeto,
-                id: new Date().toISOString
+            const projeto: IProjeto = {
+                nome: this.nomeDoProjeto,
+                id: new Date().toISOString()
             }
+            this.projetos.push(projeto);
+            this.nomeDoProjeto = ''
         }
      }
 })
 </script>
 
-<style>
+<style scoped>
+.projetos{
+    padding: 1.25rem;
+}
 
 </style>
