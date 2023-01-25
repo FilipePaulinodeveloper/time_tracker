@@ -2,7 +2,7 @@
   <div class="box formulario">
     <div class="columns">
       <div
-        class="column is-8"
+        class="column is-5"
         role="form"
         aria-label="Formulário para criação para criação de uma nova tarefa"
       >
@@ -14,16 +14,35 @@
         />
       </div>
 
+      <div class="column is-3">
+        <div class="select">
+          <select v-model="idProjeto">
+            <option value="">Selecione o projeto</option>
+            <option
+              :value="projeto.id"
+              v-for="projeto in projetos"
+              :key="projeto.id"
+            >
+              {{ projeto.nome }}
+            </option>
+          </select>
+        </div>
+      </div>
+
       <div class="column">
-          <TemporizadorTask @aoTemporizadorFinalizado="finalizarTarefa"/>
+          <TemporizadorTask @aoTemporizadorFinalizado="salvarTarefa"/>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import TemporizadorTask from './TemporizadorTask.vue';
+import {useStore} from 'vuex';
+
+import { key } from '@/store';
+
 /* eslint-disable */
 export default defineComponent({
   name: "FormuláriForm",
@@ -32,20 +51,33 @@ export default defineComponent({
     TemporizadorTask
   },
   data() {
-    return {
-      
-      descricao: ''
-    }
+    return {      
+      descricao: '',
+      idProjeto: ''
+    }    
   },
   methods:{
-    finalizarTarefa (tempoDecorrido:number) : void  {
+    salvarTarefa (tempoDecorrido:number) : void  {                      
+      console.log(this.idProjeto)
       this.$emit('aoSalvarTarefa', {
         duracaoEmSegundos:tempoDecorrido,
-        descricao:this.descricao
+        descricao:this.descricao,
+        projeto: this.projetos.find(proj => proj.id == this.idProjeto),                
       })
       this.descricao = ''
     }
-  }
+  },
+  setup() {
+    const store = useStore(key)
+    console.log(store)
+    console.log("------------------")
+    console.log(store.state.projetos)
+    console.log("------------------")
+    return {
+      projetos: computed(() => store.state.projetos)
+    }
+    console.log(store.state.projetos)
+  },
 })
 
 </script>

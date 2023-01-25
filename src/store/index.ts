@@ -1,18 +1,28 @@
 import IProjeto from "@/Interfaces/IProjeto";
+import {createStore, Store,useStore as vuexUserStore }from "vuex"
 import { InjectionKey } from "vue";
-import {createStore, Store }from "vuex"
 
-interface Esatado {
+interface Estado {
     projetos: IProjeto[];
 }
 
-export const key:InjectionKey<Store<Esatado>> = Symbol()
+export const key:InjectionKey<Store<Estado>> = Symbol()
 
-export const store = createStore<Esatado>({
+export const store = createStore<Estado>({
     state: {
-        projetos :{
-            id: new Date().toISOString,
-            nome: "Teste"
-        }
+        projetos :[]
+    },
+    mutations:{
+      'ADICIONA_PROJETO'(state, nomeDoProjeto: string){
+        const projeto = {
+            id: new Date().toISOString(),
+            nome: nomeDoProjeto
+        } as IProjeto
+        state.projetos.push(projeto)
+      }
     }
 })
+
+export function useStore(): Store<Estado>{
+  return vuexUserStore(key)
+}
